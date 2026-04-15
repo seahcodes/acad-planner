@@ -1,25 +1,45 @@
+import { Search, Bell, UserCircle } from "lucide-react";
+
 export default function Navbar() {
   return (
-    <div
-      style={{
-        height: "60px",
-        borderBottom: "1px solid rgba(255,255,255,0.08)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "0 20px",
-        background: "rgba(255,255,255,0.02)",
-      }}
-    >
+    <div className="h-16 w-full border-b border-white/5 bg-slate-900/40 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-50">
+      
       {/* Title */}
-      <h3 style={{ margin: 0, color: "white" }}>
-        Academic Planner
-      </h3>
-
-      {/* Right side */}
-      <div style={{ color: "#9ca3af", fontSize: "14px" }}>
-        Student Mode
+      <div className="flex items-center gap-4">
+        <h3 className="text-white/90 font-medium tracking-wide">
+          Academic Planner
+        </h3>
       </div>
+
+      {/* Right side - User controls */}
+      <div className="flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10 text-white/50 focus-within:border-indigo-500/50 focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all">
+          <Search className="w-4 h-4" />
+          <input 
+            type="text" 
+            placeholder="Search syllabus..." 
+            className="bg-transparent border-none outline-none text-sm w-40 text-white placeholder:text-white/30"
+          />
+        </div>
+        
+        <button className="p-2 text-slate-400 hover:text-white rounded-full hover:bg-white/5 transition-colors relative">
+          <Bell className="w-5 h-5" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-500 rounded-full shadow-[0_0_8px_rgba(99,102,241,0.8)]"></span>
+        </button>
+
+        <div className="h-8 w-px bg-white/10 mx-1"></div>
+        
+        <div className="flex items-center gap-3 cursor-pointer group">
+          <div className="flex flex-col items-end hidden sm:flex">
+            <span className="text-sm font-medium text-white/90 group-hover:text-indigo-300 transition-colors">Student Mode</span>
+            <span className="text-xs text-slate-500">B.Tech CSE</span>
+          </div>
+          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-500/20 ring-2 ring-white/10 group-hover:ring-indigo-400/50 transition-all">
+            ST
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
