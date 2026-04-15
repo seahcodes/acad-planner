@@ -1,71 +1,21 @@
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: #0f172a;
-  color: white;
+/* Removed local tailwindcss import to use CDN instead */
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-/* Layout */
-.app {
-  display: flex;
-  height: 100vh;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-/* Sidebar */
-.sidebar {
-  width: 240px;
-  background: #020617;
-  padding: 20px;
-  border-right: 1px solid rgba(255,255,255,0.08);
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  transition: all 0.3s ease-in-out;
 }
 
-.logo {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 30px;
-}
-
-/* Nav */
-.nav-link {
-  display: block;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 6px;
-  color: #94a3b8;
-  text-decoration: none;
-  transition: 0.2s;
-}
-
-.nav-link:hover {
-  background: rgba(99,102,241,0.2);
-  color: white;
-}
-
-.nav-link.active {
-  background: rgba(99,102,241,0.3);
-  color: white;
-}
-
-/* Main */
-.main {
-  flex: 1;
-  padding: 30px;
-  overflow-y: auto;
-}
-
-/* Cards (soft, not boxy) */
-.card {
-  background: rgba(255,255,255,0.05);
-  border-radius: 12px;
-  padding: 16px;
-}
-
-/* Buttons */
-.btn {
-  padding: 10px 16px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  background: #6366f1;
-  color: white;
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }

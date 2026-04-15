@@ -1,5 +1,5 @@
-import { MOCK_SYLLABUS } from '../../data/mockData';
-import { useProgress } from '../../contexts/ProgressContext';
+import { MOCK_SYLLABUS } from '../data/mockData';
+import { useProgress } from '../contexts/ProgressContext';
 
 export default function WeakTopics() {
   const { progress } = useProgress();
