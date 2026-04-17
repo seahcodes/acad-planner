@@ -1,4 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import StudyPlanner from './pages/StudyPlanner'; // Import at top
+import './App.css';
+
+// Inside your <Routes>
+
 
 // Layout
 import AppLayout from "./layouts/AppLayout";
@@ -13,6 +18,8 @@ import Dashboard from "./student/Dashboard";
 import SyllabusView from "./student/SyllabusView";
 import RevisionPlanner from "./student/RevisionPlanner";
 import WeakTopics from "./student/WeakTopics";
+import Notes from './student/Notes'; 
+import AISummary from "./student/AISummary";
 
 export default function App() {
   return (
@@ -23,6 +30,7 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        
 
         {/* App Layout Routes */}
         <Route element={<AppLayout />}>
@@ -30,6 +38,9 @@ export default function App() {
           <Route path="/syllabus" element={<SyllabusView />} />
           <Route path="/revision-plan" element={<RevisionPlanner />} />
           <Route path="/weak-topics" element={<WeakTopics />} />
+          <Route path="/planner" element={<StudyPlanner />} />
+          <Route path="/notes" element={<Notes />} />
+          <Route path="/ai-summary" element={<AISummary />} />
         </Route>
 
         {/* Catch-all */}

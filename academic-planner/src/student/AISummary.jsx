@@ -1,20 +1,69 @@
-import { useLocation } from 'react-router-dom';
+import { useState } from "react";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Sparkles, Send, Loader2 } from "lucide-react";
 
-export default function AISummary() {
-  const location = useLocation();
-  const topic = location.state?.topic || 'Unknown Topic';
+// NOTE: In a real app, move your API Key to a .env file!
+const genAI = new GoogleGenerativeAI("my_key");
+
+export default function AISummary({ topicName }) {
+  const [prompt, setPrompt] = useState("");
+  const [response, setResponse] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const generateAIContent = async () => {
+    if (!prompt && !topicName) return;
+    setLoading(true);
+    
+    try {
+      const model = genAI.getGenerativeModel({ model: "gemini-3-flash" });
+      
+      // We context-wrap the student's question to keep it academic
+      const fullPrompt = `You are an expert academic tutor for a B.Tech Computer Science student. 
+      The current topic is: ${topicName}. 
+      Student asks: ${prompt || "Give me a high-level summary and key points for my exam."}`;
+
+      const result = await model.generateContent(fullPrompt);
+      setResponse(result.response.text());
+    } catch (error) {
+      setResponse("Error: Could not reach the AI. Check your API key!");
+    }
+    setLoading(false);
+  };
 
   return (
-    <div className="page">
-      <h1>✨ AI Summary</h1>
+    <div className="bg-indigo-600/10 border border-indigo-500/20 rounded-[2rem] p-6 mb-8">
+      <div className="flex items-center gap-2 mb-4 text-indigo-400">
+        <Sparkles size={20} />
+        <h3 className="font-bold uppercase tracking-widest text-xs">AI Academic Assistant</h3>
+      </div>
 
-      <div className="card">
-        <h2>{topic}</h2>
+      {/* Response Area */}
+      <div className="min-h-[100px] text-slate-200 text-sm leading-relaxed mb-6">
+        {loading ? (
+          <div className="flex items-center gap-2 text-slate-500 italic">
+            <Loader2 className="animate-spin" size={16} /> AI is thinking...
+          </div>
+        ) : (
+          response || `I'm ready! Ask me anything about ${topicName} or click the button for a general summary.`
+        )}
+      </div>
 
-        <p>
-          This is a placeholder AI summary.
-          You can later connect OpenAI API here.
-        </p>
+      {/* Input Area */}
+      <div className="relative">
+        <input 
+          type="text"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          placeholder={`Ask about ${topicName}...`}
+          className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-3 px-4 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all"
+        />
+        <button 
+          onClick={generateAIContent}
+          disabled={loading}
+          className="absolute right-2 top-1.5 p-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition-all disabled:opacity-50"
+        >
+          <Send size={18} />
+        </button>
       </div>
     </div>
   );

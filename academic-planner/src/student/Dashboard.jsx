@@ -1,151 +1,340 @@
-import { useMemo } from "react";
+// import { useMemo, useState, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { useProgress } from "../contexts/ProgressContext";
+// import { MOCK_SYLLABUS, generateRevisionPlan } from "../data/mockData";
+// import { 
+//   CheckCircle2, 
+//   AlertTriangle, 
+//   LightbulbIcon, 
+//   Layers, 
+//   TrendingUp, 
+//   Circle, 
+//   Calendar,
+//   ChevronRight,
+//   RefreshCw
+// } from "lucide-react";
+// import toast from "react-hot-toast";
+
+// // --- ENGINE: BACKLOG RECALCULATION ---
+// const recalculateBacklog = (currentPlan) => {
+//   const todayStr = new Date().toLocaleDateString();
+//   const todayTime = new Date().setHours(0, 0, 0, 0);
+//   let backlog = [];
+
+//   const updatedPlan = currentPlan.map(day => {
+//     const dayDate = new Date(day.date).setHours(0, 0, 0, 0);
+//     if (dayDate < todayTime) {
+//       const missed = day.topics.filter(t => t.status === 'pending');
+//       backlog.push(...missed);
+//       return { ...day, topics: day.topics.filter(t => t.status === 'completed') };
+//     }
+//     return day;
+//   });
+
+//   if (backlog.length > 0) {
+//     return updatedPlan.map(day => {
+//       if (day.date === todayStr) {
+//         return { ...day, topics: [...backlog, ...day.topics] };
+//       }
+//       return day;
+//     });
+//   }
+//   return updatedPlan;
+// };
+
+// export default function Dashboard() {
+//   const navigate = useNavigate();
+//   const { progress } = useProgress();
+//   const [revisionPlan, setRevisionPlan] = useState(() => generateRevisionPlan(MOCK_SYLLABUS));
+
+//   // Auto-run recalculation on load
+//   useEffect(() => {
+//     setRevisionPlan(prev => recalculateBacklog(prev));
+//   }, []);
+
+//   const stats = useMemo(() => {
+//     let total = 0, strong = 0, weak = 0, moderate = 0;
+//     MOCK_SYLLABUS.forEach((sub) =>
+//       sub.units.forEach((unit) =>
+//         unit.topics.forEach((t) => {
+//           total++;
+//           const s = progress[t.id] || t.strength || "unset";
+//           if (s === "strong") strong++;
+//           if (s === "weak") weak++;
+//           if (s === "moderate") moderate++;
+//         })
+//       )
+//     );
+//     return { total, strong, weak, moderate };
+//   }, [progress]);
+
+//   const completionPercentage = stats.total ? Math.round(((stats.strong + stats.moderate) / stats.total) * 100) : 0;
+
+//   const toggleTopicStatus = (dayIndex, topicId) => {
+//     setRevisionPlan(prevPlan => prevPlan.map((day, dIdx) => {
+//       if (dIdx !== dayIndex) return day;
+//       return {
+//         ...day,
+//         topics: day.topics.map(topic => {
+//           if (topic.id !== topicId) return topic;
+//           const isDone = topic.status !== 'completed';
+//           if (isDone) toast.success(`Done: ${topic.name}`);
+//           return { ...topic, status: isDone ? 'completed' : 'pending' };
+//         })
+//       };
+//     }));
+//   };
+
+//   const handleStartSession = () => {
+//     const next = revisionPlan.flatMap(d => d.topics).find(t => t.status === 'pending');
+//     if (next) {
+//       toast(`Starting: ${next.name}`, { icon: '🚀' });
+//       navigate(`/study/${next.id}`);
+//     } else {
+//       toast.success("All caught up!");
+//     }
+//   };
+
+//   return (
+//     <div className="max-w-6xl mx-auto flex flex-col gap-8 pb-12">
+//       {/* Header */}
+//       <div className="bg-slate-900/40 border border-white/10 rounded-[2.5rem] p-8 relative overflow-hidden backdrop-blur-xl flex flex-col md:flex-row justify-between items-center gap-6">
+//         <div className="relative z-10">
+//           <h1 className="text-4xl font-black text-white mb-2">Focus Mode: <span className="text-indigo-400">Active</span></h1>
+//           <p className="text-slate-400 text-lg">You're mastering <b>{stats.total} topics</b>.</p>
+//         </div>
+//         <div className="bg-indigo-500/10 border border-indigo-500/20 p-6 rounded-3xl text-center">
+//           <div className="text-5xl font-black text-white">{completionPercentage}%</div>
+//         </div>
+//       </div>
+
+//       {/* Stats Cards */}
+//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+//         <Card title="Total Syllabus" value={stats.total} icon={Layers} color="indigo" onClick={() => navigate('/syllabus')} />
+//         <Card title="Strong" value={stats.strong} icon={CheckCircle2} color="emerald" onClick={() => navigate('/syllabus')} />
+//         <Card title="Moderate" value={stats.moderate} icon={TrendingUp} color="amber" onClick={() => navigate('/syllabus')} />
+//         <Card title="Needs Review" value={stats.weak} icon={AlertTriangle} color="rose" onClick={() => navigate('/weak-topics')} />
+//       </div>
+
+//       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+//         <div className="lg:col-span-2 space-y-6">
+//           <h3 className="text-2xl font-black text-white flex items-center gap-3"><Calendar className="text-indigo-500" /> DAILY ROADMAP</h3>
+//           <div className="space-y-4">
+//             {revisionPlan.slice(0, 3).map((day, dayIdx) => (
+//               <div key={day.day} className="bg-slate-900/20 border border-white/5 rounded-[2rem] p-6 backdrop-blur-sm">
+//                 <div className="flex items-center gap-3 mb-6">
+//                   <span className="bg-indigo-600 text-white px-3 py-1 rounded-lg text-[10px] font-black">DAY {day.day}</span>
+//                   <span className="text-[10px] text-slate-500 font-bold">{day.date}</span>
+//                 </div>
+//                 <div className="space-y-3">
+//                   {day.topics.map((topic) => (
+//                     <div key={topic.id} onClick={() => toggleTopicStatus(dayIdx, topic.id)} className={`flex items-center justify-between p-4 rounded-2xl cursor-pointer border ${topic.status === 'completed' ? 'bg-emerald-500/5 border-emerald-500/20 opacity-60' : 'bg-slate-950/40 border-white/5'}`}>
+//                       <div className="flex items-center gap-4">
+//                         {topic.status === 'completed' ? <CheckCircle2 className="text-emerald-500" size={20} /> : <Circle className="text-slate-700" size={20} />}
+//                         <p className={`font-bold text-sm ${topic.status === 'completed' ? 'text-slate-500 line-through' : 'text-slate-200'}`}>{topic.name}</p>
+//                       </div>
+//                       <ChevronRight size={14} className="text-slate-800" />
+//                     </div>
+//                   ))}
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//         </div>
+
+//         {/* Sidebar */}
+//         <div className="bg-gradient-to-br from-indigo-600 to-purple-800 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
+//           <LightbulbIcon className="absolute -right-4 -top-4 text-white/10" size={140} />
+//           <div className="relative z-10 flex flex-col h-full justify-between">
+//             <div>
+//               <div className="inline-flex py-1 px-3 bg-white/20 text-white text-[10px] font-black rounded-lg mb-6">AI RECOMMENDATION</div>
+//               <h3 className="text-2xl font-black text-white mb-3">Master TOC Today</h3>
+//               <p className="text-indigo-100 text-sm leading-relaxed">Focus on <b>GNF Conversions</b> ($A_1, A_2, A_3$ terminology).</p>
+//             </div>
+//             <button onClick={handleStartSession} className="mt-8 w-full bg-white text-indigo-900 font-black py-4 rounded-2xl hover:bg-indigo-50 transition-all uppercase tracking-widest text-xs">Start Session</button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// function Card({ title, value, icon: Icon, color, onClick }) {
+//   const colors = {
+//     indigo: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
+//     emerald: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+//     amber: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+//     rose: "text-rose-400 bg-rose-500/10 border-rose-500/20",
+//   };
+//   return (
+//     <div onClick={onClick} className={`cursor-pointer rounded-[2rem] border backdrop-blur-xl p-6 transition-all hover:-translate-y-2 ${colors[color] || colors.indigo} bg-slate-900/40`}>
+//       <div className="flex justify-between items-start mb-6">
+//         <div className="p-3 rounded-2xl bg-white/5"><Icon className="w-6 h-6" /></div>
+//         <span className="text-4xl font-black text-white">{value}</span>
+//       </div>
+//       <h3 className="text-slate-500 font-bold tracking-widest text-[10px] uppercase">{title}</h3>
+//     </div>
+//   );
+// }
+
+import { useMemo, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useProgress } from "../contexts/ProgressContext";
-import { MOCK_SYLLABUS } from "../data/mockData";
-import { CheckCircle2, AlertTriangle, LightbulbIcon, Layers, TrendingUp } from "lucide-react";
+import { MOCK_SYLLABUS, generateRevisionPlan } from "../data/mockData";
+import { 
+  CheckCircle2, 
+  AlertTriangle, 
+  Layers, 
+  TrendingUp, 
+  Circle, 
+  Calendar,
+  ChevronRight
+} from "lucide-react";
+import toast from "react-hot-toast";
+// 1. IMPORT the new component
+import FocusTimer from "./FocusTimer";
+import ExamTimetable from "./ExamTimetable";
+
+const recalculateBacklog = (currentPlan) => {
+  const todayStr = new Date().toLocaleDateString();
+  const todayTime = new Date().setHours(0, 0, 0, 0);
+  let backlog = [];
+
+  const updatedPlan = currentPlan.map(day => {
+    const dayDate = new Date(day.date).setHours(0, 0, 0, 0);
+    if (dayDate < todayTime) {
+      const missed = day.topics.filter(t => t.status === 'pending');
+      backlog.push(...missed);
+      return { ...day, topics: day.topics.filter(t => t.status === 'completed') };
+    }
+    return day;
+  });
+
+  if (backlog.length > 0) {
+    return updatedPlan.map(day => {
+      if (day.date === todayStr) {
+        return { ...day, topics: [...backlog, ...day.topics] };
+      }
+      return day;
+    });
+  }
+  return updatedPlan;
+};
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const { progress } = useProgress();
+  const [revisionPlan, setRevisionPlan] = useState(() => generateRevisionPlan(MOCK_SYLLABUS));
+
+  useEffect(() => {
+    setRevisionPlan(prev => recalculateBacklog(prev));
+  }, []);
 
   const stats = useMemo(() => {
-    let total = 0,
-      strong = 0,
-      weak = 0,
-      moderate = 0;
-
+    let total = 0, strong = 0, weak = 0, moderate = 0;
     MOCK_SYLLABUS.forEach((sub) =>
       sub.units.forEach((unit) =>
         unit.topics.forEach((t) => {
           total++;
-          const s = progress[t.id] || "unset";
+          const s = progress[t.id] || t.strength || "unset";
           if (s === "strong") strong++;
           if (s === "weak") weak++;
           if (s === "moderate") moderate++;
         })
       )
     );
-
     return { total, strong, weak, moderate };
   }, [progress]);
 
-  const completionPercentage = stats.total
-    ? Math.round(((stats.strong + stats.moderate) / stats.total) * 100)
-    : 0;
+  const completionPercentage = stats.total ? Math.round(((stats.strong + stats.moderate) / stats.total) * 100) : 0;
+
+  const toggleTopicStatus = (dayIndex, topicId) => {
+    setRevisionPlan(prevPlan => prevPlan.map((day, dIdx) => {
+      if (dIdx !== dayIndex) return day;
+      return {
+        ...day,
+        topics: day.topics.map(topic => {
+          if (topic.id !== topicId) return topic;
+          const isDone = topic.status !== 'completed';
+          if (isDone) toast.success(`Done: ${topic.name}`);
+          return { ...topic, status: isDone ? 'completed' : 'pending' };
+        })
+      };
+    }));
+  };
 
   return (
-    <div className="max-w-6xl mx-auto flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {/* Header Profile Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/5 border border-white/10 rounded-3xl p-8 relative overflow-hidden backdrop-blur-xl shadow-2xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/20 blur-[100px] -translate-y-1/2 translate-x-1/4 rounded-full pointer-events-none"></div>
+    <div className="max-w-6xl mx-auto flex flex-col gap-8 pb-12">
+      {/* Header */}
+      <div className="bg-slate-900/40 border border-white/10 rounded-[2.5rem] p-8 relative overflow-hidden backdrop-blur-xl flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/20 border border-indigo-500/30 rounded-full text-indigo-300 text-xs font-semibold uppercase tracking-wider mb-4">
-            <CheckCircle2 className="w-4 h-4" /> Keep it up!
-          </div>
-          <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight">
-            Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Student</span> 👋
-          </h1>
-          <p className="text-slate-400 text-lg max-w-xl leading-relaxed">
-            Your progress is looking solid. Let's conquer those weak topics before finals.
-          </p>
+          <h1 className="text-4xl font-black text-white mb-2">Focus Mode: <span className="text-indigo-400">Active</span></h1>
+          <p className="text-slate-400 text-lg">You're mastering <b>{stats.total} topics</b>.</p>
         </div>
-        <div className="hidden md:flex relative z-10 items-center justify-center p-4 bg-white/5 rounded-2xl border border-white/10 shrink-0">
-          <div className="text-center px-4">
-            <p className="text-slate-400 font-medium text-sm mb-1 uppercase tracking-wider">Progress</p>
-            <div className="text-4xl font-black text-indigo-400">{completionPercentage}%</div>
-          </div>
+        <div className="bg-indigo-500/10 border border-indigo-500/20 p-6 rounded-3xl text-center">
+          <div className="text-5xl font-black text-white">{completionPercentage}%</div>
         </div>
       </div>
 
-      {/* Stats Grid */}
+      {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card title="Total Topics" value={stats.total} icon={Layers} color="indigo" />
-        <Card title="Strong Subjects" value={stats.strong} icon={CheckCircle2} color="emerald" />
-        <Card title="Moderate Grasp" value={stats.moderate} icon={TrendingUp} color="amber" />
-        <Card title="Needs Review" value={stats.weak} icon={AlertTriangle} color="rose" />
+        <Card title="Total Syllabus" value={stats.total} icon={Layers} color="indigo" onClick={() => navigate('/syllabus')} />
+        <Card title="Strong" value={stats.strong} icon={CheckCircle2} color="emerald" onClick={() => navigate('/syllabus')} />
+        <Card title="Moderate" value={stats.moderate} icon={TrendingUp} color="amber" onClick={() => navigate('/syllabus')} />
+        <Card title="Needs Review" value={stats.weak} icon={AlertTriangle} color="rose" onClick={() => navigate('/weak-topics')} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Progress Section */}
-        <div className="lg:col-span-2 bg-slate-900/50 backdrop-blur-xl border border-white/5 rounded-3xl p-8 shadow-xl">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="text-xl font-bold text-white tracking-tight">Curriculum Mastery</h3>
-            <span className="text-indigo-400 font-bold bg-indigo-500/10 px-3 py-1 rounded-lg border border-indigo-500/20">{completionPercentage}%</span>
-          </div>
-          <div className="space-y-3">
-            <div className="flex justify-between text-sm font-medium">
-              <span className="text-emerald-400">{stats.strong} Strong</span>
-              <span className="text-amber-400">{stats.moderate} Moderate</span>
-              <span className="text-rose-400">{stats.weak} Weak</span>
-            </div>
-            {/* Multi-segment progress bar */}
-            <div className="w-full h-4 bg-slate-800 rounded-full overflow-hidden flex gap-1 group shadow-[inset_0_1px_4px_rgba(0,0,0,0.5)]">
-              <div
-                 className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all duration-700 ease-out"
-                 style={{ width: `${(stats.strong / stats.total) * 100 || 0}%` }}
-              />
-              <div
-                 className="h-full bg-gradient-to-r from-amber-500 to-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.5)] transition-all duration-700 ease-out delay-100"
-                 style={{ width: `${(stats.moderate / stats.total) * 100 || 0}%` }}
-              />
-              <div
-                 className="h-full bg-gradient-to-r from-rose-500 to-rose-400 shadow-[0_0_10px_rgba(244,63,94,0.5)] transition-all duration-700 ease-out delay-200"
-                 style={{ width: `${(stats.weak / stats.total) * 100 || 0}%` }}
-              />
-            </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        {/* Main Content: Daily Roadmap */}
+        <div className="lg:col-span-2 space-y-6">
+          <h3 className="text-2xl font-black text-white flex items-center gap-3"><Calendar className="text-indigo-500" /> DAILY ROADMAP</h3>
+          <div className="space-y-4">
+            {revisionPlan.slice(0, 3).map((day, dayIdx) => (
+              <div key={day.day} className="bg-slate-900/20 border border-white/5 rounded-[2rem] p-6 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="bg-indigo-600 text-white px-3 py-1 rounded-lg text-[10px] font-black">DAY {day.day}</span>
+                  <span className="text-[10px] text-slate-500 font-bold">{day.date}</span>
+                </div>
+                <div className="space-y-3">
+                  {day.topics.map((topic) => (
+                    <div key={topic.id} onClick={() => toggleTopicStatus(dayIdx, topic.id)} className={`flex items-center justify-between p-4 rounded-2xl cursor-pointer border ${topic.status === 'completed' ? 'bg-emerald-500/5 border-emerald-500/20 opacity-60' : 'bg-slate-950/40 border-white/5'}`}>
+                      <div className="flex items-center gap-4">
+                        {topic.status === 'completed' ? <CheckCircle2 className="text-emerald-500" size={20} /> : <Circle className="text-slate-700" size={20} />}
+                        <p className={`font-bold text-sm ${topic.status === 'completed' ? 'text-slate-500 line-through' : 'text-slate-200'}`}>{topic.name}</p>
+                      </div>
+                      <ChevronRight size={14} className="text-slate-800" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Suggestion / Spotlight */}
-        <div className="bg-gradient-to-br from-indigo-600/20 to-purple-600/20 backdrop-blur-xl border border-indigo-500/30 rounded-3xl p-8 shadow-xl relative overflow-hidden group">
-          <div className="absolute -right-6 -top-6 text-indigo-500/20 group-hover:scale-110 transition-transform duration-700 origin-bottom-left">
-            <LightbulbIcon size={120} strokeWidth={1} />
-          </div>
-          <div className="relative z-10 flex flex-col h-full justify-between">
-            <div>
-              <div className="inline-flex py-1 px-3 bg-indigo-500/30 text-indigo-200 text-xs font-bold uppercase rounded-lg mb-4 backdrop-blur-md">
-                Smart Focus
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2 leading-snug">Priority Recommendation</h3>
-              <p className="text-indigo-200 leading-relaxed font-medium">
-                You have <span className="text-white text-xl font-black mx-1">{stats.weak}</span>
-                topics marked as weak. Tackling just 2 of these today will boost your confidence enormously.
-              </p>
-            </div>
-            
-            <button className="mt-8 w-full bg-white text-indigo-900 font-bold py-3 rounded-xl hover:bg-indigo-50 transition-colors shadow-lg hover:shadow-indigo-500/25 active:scale-[0.98]">
-              Review Weak Topics
-            </button>
-          </div>
-        </div>
-        
+      
+        <div className="lg:sticky lg:top-24 flex flex-col gap-6">
+  <FocusTimer />
+  <ExamTimetable />
+</div>
       </div>
     </div>
   );
 }
 
-// Reusable card with dynamic colors
-function Card({ title, value, icon: Icon, color }) {
-  const colorMap = {
-    indigo: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20 shadow-indigo-500/10",
-    emerald: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20 shadow-emerald-500/10",
-    amber: "text-amber-400 bg-amber-500/10 border-amber-500/20 shadow-amber-500/10",
-    rose: "text-rose-400 bg-rose-500/10 border-rose-500/20 shadow-rose-500/10",
+function Card({ title, value, icon: Icon, color, onClick }) {
+  const colors = {
+    indigo: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
+    emerald: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+    amber: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+    rose: "text-rose-400 bg-rose-500/10 border-rose-500/20",
   };
-
-  const styleConfig = colorMap[color] || colorMap.indigo;
-
   return (
-    <div className={`
-      relative overflow-hidden rounded-3xl border backdrop-blur-xl p-6 transition-all duration-300
-      hover:-translate-y-1 hover:shadow-2xl hover:brightness-110
-      ${styleConfig} bg-slate-900/40
-    `}>
+    <div onClick={onClick} className={`cursor-pointer rounded-[2rem] border backdrop-blur-xl p-6 transition-all hover:-translate-y-2 ${colors[color] || colors.indigo} bg-slate-900/40`}>
       <div className="flex justify-between items-start mb-6">
-        <div className={`p-3 rounded-2xl ${styleConfig.split(' ')[1]}`}>
-          <Icon className={`w-6 h-6 ${styleConfig.split(' ')[0]}`} />
-        </div>
-        <span className="text-3xl font-black text-white">{value}</span>
+        <div className="p-3 rounded-2xl bg-white/5"><Icon className="w-6 h-6" /></div>
+        <span className="text-4xl font-black text-white">{value}</span>
       </div>
-      <h3 className="text-slate-400 font-semibold tracking-wide text-sm uppercase">{title}</h3>
+      <h3 className="text-slate-500 font-bold tracking-widest text-[10px] uppercase">{title}</h3>
     </div>
   );
 }

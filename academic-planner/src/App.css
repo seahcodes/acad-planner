@@ -1,5 +1,5 @@
 
-/* Reset */
+Reset
 * {
   margin: 0;
   padding: 0;
@@ -8,7 +8,7 @@
 
 /* Root theme */
 :root {
-  --bg: #0f172a;
+  --bg: #717e9c;
   --card: rgba(255, 255, 255, 0.04);
   --border: rgba(255, 255, 255, 0.08);
   --text: #e2e8f0;

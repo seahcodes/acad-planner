@@ -1,11 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
-import { BookOpen, Calendar, AlertTriangle, LayoutDashboard } from "lucide-react";
+import { BookOpen, Calendar, AlertTriangle, LayoutDashboard, Library, Sparkles } from "lucide-react";
 
 const links = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/syllabus", label: "Syllabus", icon: BookOpen },
   { to: "/revision-plan", label: "Revision Plan", icon: Calendar },
+  { to: "/notes", label: "Knowledge Vault", icon: Library },
+  { to: "/ai-summary", label: "AI Summary", icon: Sparkles },
   { to: "/weak-topics", label: "Weak Topics", icon: AlertTriangle },
+
 ];
 
 export default function Sidebar() {

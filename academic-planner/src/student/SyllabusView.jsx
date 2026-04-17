@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom"; // Added for the Pro-Tip linking
 import { MOCK_SYLLABUS } from "../data/mockData";
 import { useProgress } from "../contexts/ProgressContext";
 import { BookOpen, CheckCircle2, ChevronRight, Circle } from "lucide-react";
@@ -37,8 +38,8 @@ export default function SyllabusView() {
                     <BookOpen size={24} />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-white">{sub.subjectName}</h2>
-                    <p className="text-sm text-slate-400 font-medium">B.Tech • {sub.units.length} Units</p>
+                    <h2 className="text-2xl font-bold text-white">{sub.name}</h2>
+                    <p className="text-sm text-slate-400 font-medium">{sub.units.length} Units</p>
                   </div>
                 </div>
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center bg-white/5 text-slate-400 transition-transform duration-300 ${isExpanded ? "rotate-90 bg-indigo-500/20 text-indigo-400" : ""}`}>
@@ -75,9 +76,17 @@ export default function SyllabusView() {
                                 ) : (
                                   <Circle className="w-5 h-5 text-slate-600 shrink-0" />
                                 )}
-                                <span className={`font-medium ${status !== "unset" ? "text-slate-200" : "text-slate-400"}`}>
+                                
+                                {/* Pro-Tip: Linking the topic name to the Knowledge Vault */}
+                                <Link 
+                                  to="/notes" 
+                                  state={{ activeTopicId: topic.id }} 
+                                  className={`font-medium transition-all hover:text-indigo-400 hover:underline underline-offset-4 decoration-indigo-500/30 ${
+                                    status !== "unset" ? "text-slate-200" : "text-slate-400"
+                                  }`}
+                                >
                                   {topic.name}
-                                </span>
+                                </Link>
                               </div>
 
                               {/* Status Buttons */}
