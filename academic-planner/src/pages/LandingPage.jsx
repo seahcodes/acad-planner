@@ -34,7 +34,7 @@ export default function LandingPage() {
         
         <h2 className="text-6xl md:text-8xl font-black mb-6 leading-[1] tracking-tighter text-white drop-shadow-2xl">
           Study,<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-pink-400">
             but make it smart!
           </span>
         </h2>
@@ -52,25 +52,10 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Feature Highlights Grid - Floating Glass panels */}
-      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-32 max-w-6xl w-full z-10 animate-in fade-in slide-in-from-bottom-8 duration-[2000ms]">
-        {[
-          { icon: Target, title: 'Weak Topic Detection', desc: 'Automatically pinpoint the subjects holding you back.', color: 'indigo' },
-          { icon: Calendar, title: 'AI Revision Planner', desc: 'Generate custom schedules optimized for your exams.', color: 'purple' },
-          { icon: Sparkles, title: 'Smart Summaries', desc: 'Get bite-sized AI summaries of complex curriculum topics.', color: 'pink' },
-        ].map(({ icon: Icon, title, desc, color }) => (
-          <div key={title} className="p-8 rounded-[2rem] bg-slate-900/20 backdrop-blur-2xl border border-white/10 hover:border-white/30 hover:-translate-y-3 hover:bg-slate-900/40 transition-all duration-500 group shadow-2xl text-left">
-            <div className={`w-16 h-16 rounded-2xl mb-8 flex items-center justify-center bg-${color}-500/20 text-${color}-400 border border-${color}-500/30 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 shadow-[0_0_30px_rgba(currentColor,0.5)]`}>
-              <Icon size={32} />
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">{title}</h3>
-            <p className="text-slate-400/90 leading-relaxed font-medium">{desc}</p>
-          </div>
-        ))}
-      </div> */}
-      {/* Updated Feature Highlights - Integrated Stream Layout */}
+     
+      
 <div className="relative mt-25 max-w-6xl w-full z-10">
-  {/* The "Glow Trail" - A background line that connects features */}
+
   <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent -z-10 hidden md:block" />
 
   <div className="flex flex-col md:flex-row items-stretch justify-between gap-12">

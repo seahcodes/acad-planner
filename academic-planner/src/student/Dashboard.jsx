@@ -89,15 +89,17 @@ export default function Dashboard() {
   return (
     <div className="max-w-6xl mx-auto flex flex-col gap-8 pb-12">
       {/* Header */}
-      <div className="bg-slate-900/40 border border-white/10 rounded-[2.5rem] p-8 relative overflow-hidden backdrop-blur-xl flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="relative z-10">
-          <h1 className="text-4xl font-black text-white mb-2">Focus Mode: <span className="text-indigo-400">Active</span></h1>
-          <p className="text-slate-400 text-lg">You're mastering <b>{stats.total} topics</b>.</p>
+     <header className="relative mt-12 mb-12 bg-white/[0.02] border border-white/[0.05] rounded-[3rem] p-10 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+          <div>
+            <h1 className="text-5xl font-black text-white mb-3 italic tracking-tight">Focus Mode: <span className="text-indigo-400">Active</span></h1>
+            <p className="text-slate-400 text-lg font-medium">You're mastering <b className="text-indigo-300">{stats.total} topics</b>.</p>
+          </div>
+          <div className="w-24 h-24 rounded-full border-4 border-indigo-500/20 flex items-center justify-center">
+            <span className="text-2xl font-black text-white">{completionPercentage}%</span>
+          </div>
         </div>
-        <div className="bg-indigo-500/10 border border-indigo-500/20 p-6 rounded-3xl text-center">
-          <div className="text-5xl font-black text-white">{completionPercentage}%</div>
-        </div>
-      </div>
+      </header>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -109,29 +111,23 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         {/* Main Content: Daily Roadmap */}
-        <div className="lg:col-span-2 space-y-6">
-          <h3 className="text-2xl font-black text-white flex items-center gap-3"><Calendar className="text-indigo-500" /> DAILY ROADMAP</h3>
-          <div className="space-y-4">
-            {revisionPlan.slice(0, 3).map((day, dayIdx) => (
-              <div key={day.day} className="bg-slate-900/20 border border-white/5 rounded-[2rem] p-6 backdrop-blur-sm">
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="bg-indigo-600 text-white px-3 py-1 rounded-lg text-[10px] font-black">DAY {day.day}</span>
-                  <span className="text-[10px] text-slate-500 font-bold">{day.date}</span>
-                </div>
-                <div className="space-y-3">
-                  {day.topics.map((topic) => (
-                    <div key={topic.id} onClick={() => toggleTopicStatus(dayIdx, topic.id)} className={`flex items-center justify-between p-4 rounded-2xl cursor-pointer border ${topic.status === 'completed' ? 'bg-emerald-500/5 border-emerald-500/20 opacity-60' : 'bg-slate-950/40 border-white/5'}`}>
-                      <div className="flex items-center gap-4">
-                        {topic.status === 'completed' ? <CheckCircle2 className="text-emerald-500" size={20} /> : <Circle className="text-slate-700" size={20} />}
-                        <p className={`font-bold text-sm ${topic.status === 'completed' ? 'text-slate-500 line-through' : 'text-slate-200'}`}>{topic.name}</p>
-                      </div>
-                      <ChevronRight size={14} className="text-slate-800" />
-                    </div>
-                  ))}
-                </div>
+        <div className="lg:col-span-2 space-y-8">
+          <h3 className="text-xs font-black text-slate-500 tracking-[0.3em] uppercase">Daily Roadmap</h3>
+          {revisionPlan.slice(0, 3).map((day, dayIdx) => (
+            <div key={day.day} className="relative group">
+              <div className="absolute -left-4 top-0 bottom-0 w-px bg-white/5 group-hover:bg-indigo-500/30 transition-colors" />
+              <div className="ml-6 space-y-4">
+                <div className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4">Day {day.day} • {day.date}</div>
+                {day.topics.map((topic) => (
+                  <div key={topic.id} onClick={() => toggleTopicStatus(dayIdx, topic.id)} 
+                    className={`flex items-center justify-between p-5 rounded-[1.5rem] cursor-pointer transition-all border ${topic.status === 'completed' ? 'bg-emerald-500/5 border-emerald-500/10' : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.05]'}`}>
+                    <p className={`font-bold text-sm ${topic.status === 'completed' ? 'text-slate-600 line-through' : 'text-slate-200'}`}>{topic.name}</p>
+                    <ChevronRight size={16} className={topic.status === 'completed' ? 'text-emerald-500' : 'text-slate-700'} />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
 
       
@@ -145,19 +141,19 @@ export default function Dashboard() {
 }
 
 function Card({ title, value, icon: Icon, color, onClick }) {
-  const colors = {
-    indigo: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
-    emerald: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
-    amber: "text-amber-400 bg-amber-500/10 border-amber-500/20",
-    rose: "text-rose-400 bg-rose-500/10 border-rose-500/20",
+  const colorStyles = {
+    indigo: "text-slate-300 bg-white/5 border-white/10",
+    emerald: "text-emerald-400 bg-emerald-500/5 border-emerald-500/10",
+    amber: "text-amber-400 bg-amber-500/5 border-amber-500/10",
+    rose: "text-rose-400 bg-rose-500/5 border-rose-500/10",
   };
   return (
-    <div onClick={onClick} className={`cursor-pointer rounded-[2rem] border backdrop-blur-xl p-6 transition-all hover:-translate-y-2 ${colors[color] || colors.indigo} bg-slate-900/40`}>
-      <div className="flex justify-between items-start mb-6">
-        <div className="p-3 rounded-2xl bg-white/5"><Icon className="w-6 h-6" /></div>
+    <div onClick={onClick} className={`cursor-pointer rounded-[2.5rem] border border-white/[0.05] bg-white/[0.02] backdrop-blur-md p-8 transition-all hover:-translate-y-2 ${colorStyles[color]}`}>
+      <div className="flex justify-between items-start mb-8">
+        <Icon className="w-6 h-6 opacity-50" />
         <span className="text-4xl font-black text-white">{value}</span>
       </div>
-      <h3 className="text-slate-500 font-bold tracking-widest text-[10px] uppercase">{title}</h3>
+      <h3 className="text-slate-500 font-bold tracking-[0.2em] text-[9px] uppercase">{title}</h3>
     </div>
   );
 }
