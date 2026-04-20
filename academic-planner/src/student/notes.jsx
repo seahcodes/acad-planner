@@ -47,16 +47,16 @@ export default function Notes() {
         {MOCK_SYLLABUS.map((subject) => (
           <div key={subject.id} className="mb-6">
             <h3 className="text-indigo-400 text-[10px] font-black uppercase tracking-widest mb-3 px-2 flex items-center gap-2">
-              <span>{subject.icon}</span> {subject.name} {/* CHANGED: subject.subjectName -> subject.name */}
+              <span>{subject.icon}</span> {subject.name}
             </h3>
             <div className="space-y-2">
-              {subject.units.map((unit) => (
+              {subject.units.map((unit, unitIndex) => (
                 <div key={unit.id} className="rounded-2xl overflow-hidden">
                   <button 
                     onClick={() => setExpandedUnit(expandedUnit === unit.id ? null : unit.id)}
                     className="w-full flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 transition-all"
                   >
-                    <span className="text-sm font-bold text-slate-200">{unit.title}</span> {/* CHANGED: unit.title -> unit.name */}
+                    <span className="text-sm font-bold text-slate-200">Unit {unitIndex + 1}: {unit.name}</span>
                     {expandedUnit === unit.id ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
                   </button>
                   

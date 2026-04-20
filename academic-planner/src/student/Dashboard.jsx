@@ -1,89 +1,31 @@
 
 
-import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProgress } from "../contexts/ProgressContext";
-import { MOCK_SYLLABUS, generateRevisionPlan } from "../data/mockData";
+import { MOCK_SYLLABUS } from "../data/mockData";
 import { 
   CheckCircle2, 
   AlertTriangle, 
   Layers, 
-  TrendingUp, 
-  Circle, 
-  Calendar,
-  ChevronRight
+  TrendingUp
 } from "lucide-react";
 import toast from "react-hot-toast";
 // 1. IMPORT the new component
 import FocusTimer from "./FocusTimer";
 import ExamTimetable from "./ExamTimetable";
 
-const recalculateBacklog = (currentPlan) => {
-  const todayStr = new Date().toLocaleDateString();
-  const todayTime = new Date().setHours(0, 0, 0, 0);
-  let backlog = [];
-
-  const updatedPlan = currentPlan.map(day => {
-    const dayDate = new Date(day.date).setHours(0, 0, 0, 0);
-    if (dayDate < todayTime) {
-      const missed = day.topics.filter(t => t.status === 'pending');
-      backlog.push(...missed);
-      return { ...day, topics: day.topics.filter(t => t.status === 'completed') };
-    }
-    return day;
-  });
-
-  if (backlog.length > 0) {
-    return updatedPlan.map(day => {
-      if (day.date === todayStr) {
-        return { ...day, topics: [...backlog, ...day.topics] };
-      }
-      return day;
-    });
-  }
-  return updatedPlan;
-};
-
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { progress } = useProgress();
-  const [revisionPlan, setRevisionPlan] = useState(() => generateRevisionPlan(MOCK_SYLLABUS));
-
-  useEffect(() => {
-    setRevisionPlan(prev => recalculateBacklog(prev));
-  }, []);
-
-  const stats = useMemo(() => {
-    let total = 0, strong = 0, weak = 0, moderate = 0;
-    MOCK_SYLLABUS.forEach((sub) =>
-      sub.units.forEach((unit) =>
-        unit.topics.forEach((t) => {
-          total++;
-          const s = progress[t.id] || t.strength || "unset";
-          if (s === "strong") strong++;
-          if (s === "weak") weak++;
-          if (s === "moderate") moderate++;
-        })
-      )
-    );
-    return { total, strong, weak, moderate };
-  }, [progress]);
+  const { progress, stats, revisionPlan, toggleTopicStatus, completedTopics, toggleCompletion, examChecklist } = useProgress();
 
   const completionPercentage = stats.total ? Math.round(((stats.strong + stats.moderate) / stats.total) * 100) : 0;
 
-  const toggleTopicStatus = (dayIndex, topicId) => {
-    setRevisionPlan(prevPlan => prevPlan.map((day, dIdx) => {
-      if (dIdx !== dayIndex) return day;
-      return {
-        ...day,
-        topics: day.topics.map(topic => {
-          if (topic.id !== topicId) return topic;
-          const isDone = topic.status !== 'completed';
-          if (isDone) toast.success(`Done: ${topic.name}`);
-          return { ...topic, status: isDone ? 'completed' : 'pending' };
-        })
-      };
-    }));
+  const handleToggleTopicStatus = (dayIndex, topicId) => {
+    const day = revisionPlan[dayIndex];
+    const topic = day.topics.find(t => t.id === topicId);
+    const isDone = topic.status !== 'completed';
+    if (isDone) toast.success(`Done: ${topic.name}`);
+    toggleTopicStatus(dayIndex, topicId);
   };
 
   return (
@@ -110,24 +52,42 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        {/* Main Content: Daily Roadmap */}
+        {/* Main Content: Daily Checklist */}
         <div className="lg:col-span-2 space-y-8">
-          <h3 className="text-xs font-black text-slate-500 tracking-[0.3em] uppercase">Daily Roadmap</h3>
-          {revisionPlan.slice(0, 3).map((day, dayIdx) => (
-            <div key={day.day} className="relative group">
+          <h3 className="text-xs font-black text-slate-500 tracking-[0.3em] uppercase">Daily Checklist</h3>
+          {examChecklist.length > 0 && examChecklist[0].topics.length > 0 ? (
+            <div className="relative group">
               <div className="absolute -left-4 top-0 bottom-0 w-px bg-white/5 group-hover:bg-indigo-500/30 transition-colors" />
               <div className="ml-6 space-y-4">
-                <div className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4">Day {day.day} • {day.date}</div>
-                {day.topics.map((topic) => (
-                  <div key={topic.id} onClick={() => toggleTopicStatus(dayIdx, topic.id)} 
-                    className={`flex items-center justify-between p-5 rounded-[1.5rem] cursor-pointer transition-all border ${topic.status === 'completed' ? 'bg-emerald-500/5 border-emerald-500/10' : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.05]'}`}>
-                    <p className={`font-bold text-sm ${topic.status === 'completed' ? 'text-slate-600 line-through' : 'text-slate-200'}`}>{topic.name}</p>
-                    <ChevronRight size={16} className={topic.status === 'completed' ? 'text-emerald-500' : 'text-slate-700'} />
+                <div className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4">
+                  Today • {examChecklist[0].date} • {examChecklist[0].topics[0].subjectName}
+                </div>
+                {examChecklist[0].topics.map((topic) => (
+                  <div key={topic.id} className="flex items-center justify-between p-5 rounded-[1.5rem] border bg-white/[0.02] border-white/5 hover:bg-white/[0.05] transition-all">
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={completedTopics.includes(topic.id)}
+                        onChange={() => toggleCompletion(topic.id)}
+                        className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500"
+                      />
+                      <span className={`font-bold text-sm ${completedTopics.includes(topic.id) ? 'text-slate-600 line-through' : 'text-slate-200'}`}>
+                        {topic.name}
+                      </span>
+                    </div>
+                    <div className="text-xs text-slate-500">
+                      {topic.unitName}
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
-          ))}
+          ) : (
+            <div className="text-center py-12">
+              <div className="text-slate-400 text-lg mb-4">📝 No exams scheduled</div>
+              <p className="text-slate-500">Check back later for your study checklist.</p>
+            </div>
+          )}
         </div>
 
       

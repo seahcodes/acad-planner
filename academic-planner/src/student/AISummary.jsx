@@ -2,8 +2,16 @@ import { useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Sparkles, Send, Loader2 } from "lucide-react";
 
-// NOTE: In a real app, move your API Key to a .env file!
-const genAI = new GoogleGenerativeAI("my_key");
+// Get API Key from environment variables
+const apiKey = import.meta.env.VITE_GOOGLE_GENERATIVE_AI_KEY;
+
+// Initialize only if API key exists
+let genAI = null;
+if (apiKey) {
+  genAI = new GoogleGenerativeAI(apiKey);
+} else {
+  console.warn("⚠️ Google Generative AI key not found in environment variables");
+}
 
 export default function AISummary({ topicName }) {
   const [prompt, setPrompt] = useState("");
@@ -11,11 +19,22 @@ export default function AISummary({ topicName }) {
   const [loading, setLoading] = useState(false);
 
   const generateAIContent = async () => {
+    // Validation checks
+    if (!apiKey) {
+      setResponse("❌ API Key not configured. Add your key to .env.local:\nVITE_GOOGLE_GENERATIVE_AI_KEY=your_key");
+      return;
+    }
+    
+    if (!genAI) {
+      setResponse("❌ AI not initialized. Please restart the app and try again.");
+      return;
+    }
+    
     if (!prompt && !topicName) return;
     setLoading(true);
     
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-3-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       
       // We context-wrap the student's question to keep it academic
       const fullPrompt = `You are an expert academic tutor for a B.Tech Computer Science student. 
@@ -25,7 +44,8 @@ export default function AISummary({ topicName }) {
       const result = await model.generateContent(fullPrompt);
       setResponse(result.response.text());
     } catch (error) {
-      setResponse("Error: Could not reach the AI. Check your API key!");
+      console.error("AI Error:", error);
+      setResponse(`❌ Error: ${error.message || "Could not reach the AI. Check your API key and internet connection."}`);
     }
     setLoading(false);
   };

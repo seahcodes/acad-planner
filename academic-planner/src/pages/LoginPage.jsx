@@ -25,9 +25,8 @@ export default function LoginPage() {
       // 1. Attempt standard login
       const res = await login(email, password, role);
 
-      // 2. Logic to prevent "Invalid Credentials" block
-      // If the context returns success, OR if we are in dev mode (any email provided)
-      if (res?.success || email.length > 0) {
+      // 2. Check if login was successful
+      if (res?.success) {
         toast.success(`Logged in as ${role === 'admin' ? 'Admin' : 'Student'}`);
         
         // Ensure we navigate to the correct base route
@@ -36,7 +35,7 @@ export default function LoginPage() {
         const targetPath = role === 'admin' ? '/admin/dashboard' : '/dashboard';
         navigate(targetPath);
       } else {
-        toast.error('Login failed. Please check your credentials.');
+        toast.error(res?.error || 'Login failed. Please check your credentials.');
       }
     } catch (error) {
       console.error("Login Error:", error);

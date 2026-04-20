@@ -50,11 +50,11 @@ export default function SyllabusView() {
               {/* Units List */}
               {isExpanded && (
                 <div className="bg-slate-950/50 p-6 border-t border-white/5 flex flex-col gap-6 animate-in slide-in-from-top-4 duration-300">
-                  {sub.units.map((unit) => (
+                  {sub.units.map((unit, unitIndex) => (
                     <div key={unit.id} className="bg-white/5 border border-white/5 rounded-2xl p-5">
                       <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/5">
-                        <h4 className="text-lg font-bold text-slate-200">{unit.title}</h4>
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 bg-slate-900 px-3 py-1 rounded-lg">Unit</span>
+                        <h4 className="text-lg font-bold text-slate-200">Unit {unitIndex + 1}: {unit.name}</h4>
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 bg-slate-900 px-3 py-1 rounded-lg">{unit.topics.length} Topics</span>
                       </div>
 
                       <div className="flex flex-col gap-3">
