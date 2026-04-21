@@ -30,14 +30,10 @@ export default function LoginPage() {
       // If the context returns success, OR if we are in dev mode (any email provided)
       if (res?.success || email.length > 0) {
         toast.success(`Logged in as ${role === 'mentor' ? 'Mentor' : 'Student'}`);
-        
-        // Ensure we navigate to the correct base route
-        // Admin usually goes to /admin or /admin/dashboard
-        // Student usually goes to /dashboard
         const targetPath = role === 'mentor' ? '/mentor/dashboard' : '/dashboard';
         navigate(targetPath);
       } else {
-        toast.error('Login failed. Please check your credentials.');
+        toast.error(res?.error || 'Login failed. Please check your credentials.');
       }
     } catch (error) {
       console.error("Login Error:", error);

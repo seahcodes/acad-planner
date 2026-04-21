@@ -18,11 +18,6 @@ export default function LandingPage() {
             SyllabusIQ
           </h1>
         </div>
-        <div className="flex gap-4">
-          <Link to="/login" className="px-5 py-2 text-sm font-bold text-white hover:text-indigo-300 transition-colors bg-white/5 hover:bg-white/10 rounded-full backdrop-blur-md border border-white/10">
-            Sign In
-          </Link>
-        </div>
       </div>
 
       {/* Hero Section */}

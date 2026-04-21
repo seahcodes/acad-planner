@@ -13,6 +13,17 @@ export default function AISummary({ topicName }) {
   const [loading, setLoading] = useState(false);
 
   const generateAIContent = async () => {
+    // Validation checks
+    if (!apiKey) {
+      setResponse("❌ API Key not configured. Add your key to .env.local:\nVITE_GOOGLE_GENERATIVE_AI_KEY=your_key");
+      return;
+    }
+    
+    if (!genAI) {
+      setResponse("❌ AI not initialized. Please restart the app and try again.");
+      return;
+    }
+    
     if (!prompt && !topicName) return;
     setLoading(true);
 
