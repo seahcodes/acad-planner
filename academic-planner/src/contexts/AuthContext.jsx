@@ -26,14 +26,17 @@ export function AuthProvider({ children }) {
     }
 
     if (
-      email === "admin@demo.com" &&
+      email === "mentor@demo.com" &&
       password === "demo123" &&
-      role === "admin"
+      role === "mentor"
     ) {
       const userData = {
-        name: "Admin",
+        name: "Dr. Priya Kapoor",
         email,
         role,
+        department: "Computer Science & Engineering",
+        subjects: ["Data Structures", "Operating Systems", "Theory of Computation", "Computer Networks", "Data Science"],
+        institution: "NIT Warangal",
       };
 
       setUser(userData);

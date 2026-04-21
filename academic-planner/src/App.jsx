@@ -1,12 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import StudyPlanner from './pages/StudyPlanner'; // Import at top
+import StudyPlanner from './pages/StudyPlanner';
 import './App.css';
 
-// Inside your <Routes>
-
-
-// Layout
+// Layouts
 import AppLayout from "./layouts/AppLayout";
+import MentorLayout from "./layouts/MentorLayout";
 
 // Pages
 import LandingPage from "./pages/LandingPage";
@@ -21,6 +19,13 @@ import WeakTopics from "./student/WeakTopics";
 import Notes from './student/Notes'; 
 import AISummary from "./student/AISummary";
 
+// Mentor Pages
+import MentorDashboard from "./mentor/MentorDashboard";
+import StudentDirectory from "./mentor/StudentDirectory";
+import SyllabusManager from "./mentor/SyllabusManager";
+import ProgressTracker from "./mentor/ProgressTracker";
+import MaterialsManager from "./mentor/MaterialsManager";
+
 export default function App() {
   return (
     <Router>
@@ -30,9 +35,8 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        
 
-        {/* App Layout Routes */}
+        {/* Student Layout Routes */}
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/syllabus" element={<SyllabusView />} />
@@ -41,6 +45,15 @@ export default function App() {
           <Route path="/planner" element={<StudyPlanner />} />
           <Route path="/notes" element={<Notes />} />
           <Route path="/ai-summary" element={<AISummary />} />
+        </Route>
+
+        {/* Mentor Layout Routes */}
+        <Route element={<MentorLayout />}>
+          <Route path="/mentor/dashboard" element={<MentorDashboard />} />
+          <Route path="/mentor/students" element={<StudentDirectory />} />
+          <Route path="/mentor/syllabus" element={<SyllabusManager />} />
+          <Route path="/mentor/progress" element={<ProgressTracker />} />
+          <Route path="/mentor/materials" element={<MaterialsManager />} />
         </Route>
 
         {/* Catch-all */}

@@ -4,7 +4,7 @@ import { Sparkles, Send, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-const apiKey = "AIzaSyAGV4Z6iufFnewAnwwwQ43E2GXdlXvkI8Y";
+const apiKey = "AIzaSyBhYMNJvjfxBdy5hnd59wmFH2vZ1st_-fc";
 const genAI = new GoogleGenAI({ apiKey: apiKey });
 
 export default function AISummary({ topicName }) {

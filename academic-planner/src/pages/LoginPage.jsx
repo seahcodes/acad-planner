@@ -5,7 +5,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { BookOpen, User, Lock, ExternalLink, Eye, EyeOff } from 'lucide-react';
 import ThreeBackground from '../components/ThreeBackground';
-import { MOCK_STUDENT, MOCK_ADMIN } from '../data/mockData';
+import { MOCK_STUDENT } from '../data/mockData';
+import { MOCK_MENTOR } from '../data/mentorData';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -28,12 +29,12 @@ export default function LoginPage() {
       // 2. Logic to prevent "Invalid Credentials" block
       // If the context returns success, OR if we are in dev mode (any email provided)
       if (res?.success || email.length > 0) {
-        toast.success(`Logged in as ${role === 'admin' ? 'Admin' : 'Student'}`);
+        toast.success(`Logged in as ${role === 'mentor' ? 'Mentor' : 'Student'}`);
         
         // Ensure we navigate to the correct base route
         // Admin usually goes to /admin or /admin/dashboard
         // Student usually goes to /dashboard
-        const targetPath = role === 'admin' ? '/admin/dashboard' : '/dashboard';
+        const targetPath = role === 'mentor' ? '/mentor/dashboard' : '/dashboard';
         navigate(targetPath);
       } else {
         toast.error('Login failed. Please check your credentials.');
@@ -49,7 +50,7 @@ export default function LoginPage() {
   // Helper for those "Quick Demo" buttons to save you typing
   const handleQuickDemo = async (selectedRole) => {
     setRole(selectedRole);
-    const demoEmail = selectedRole === 'admin' ? 'admin@demo.com' : 'student@demo.com';
+    const demoEmail = selectedRole === 'mentor' ? 'mentor@demo.com' : 'student@demo.com';
     setEmail(demoEmail);
     setPassword('demo123');
     // The handleLogin will trigger on form submit, or we can call it here
@@ -73,7 +74,7 @@ export default function LoginPage() {
           
           {/* Role Switcher */}
           <div className="flex bg-slate-950/50 p-1.5 rounded-xl border border-white/5 mb-2">
-            {['student', 'admin'].map(r => (
+            {['student', 'mentor'].map(r => (
               <button
                 key={r}
                 type="button"
@@ -147,10 +148,10 @@ export default function LoginPage() {
             </button>
             <button 
               type="button" 
-              onClick={() => handleQuickDemo('admin')}
+              onClick={() => handleQuickDemo('mentor')}
               className="text-[10px] uppercase tracking-widest font-bold py-2 rounded-lg bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white transition-all border border-white/5"
             >
-              Demo Admin
+              Demo Mentor
             </button>
           </div>
 

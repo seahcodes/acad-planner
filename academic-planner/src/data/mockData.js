@@ -190,9 +190,5 @@ export const MOCK_STUDENT = {
   course: 'B.Tech CSE',
 };
 
-export const MOCK_ADMIN = {
-  id: 'admin_1',
-  name: 'System Admin',
-  role: 'admin',
-  institution: 'SyllabusIQ HQ',
-};
+// MOCK_ADMIN removed — mentor data now lives in mentorData.js
+// import { MOCK_MENTOR } from './mentorData' instead
