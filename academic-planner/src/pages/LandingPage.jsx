@@ -11,9 +11,7 @@ export default function LandingPage() {
       {/* Navbar/Header area */}
       <div className="absolute top-0 left-0 w-full p-6 flex justify-between items-center z-10 mix-blend-screen mix-blend-plus-lighter">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/25">
-            <BookOpen size={24} className="text-white" />
-          </div>
+          <img src="/Favicon-logo.png" alt="SyllabusIQ" className="h-12 w-12 rounded-xl shadow-lg shadow-indigo-500/25" />
           <h1 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300">
             SyllabusIQ
           </h1>

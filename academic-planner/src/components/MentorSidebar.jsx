@@ -30,12 +30,10 @@ export default function MentorSidebar() {
   };
 
   return (
-    <div className="w-64 bg-slate-900/50 backdrop-blur-xl border-r border-white/5 p-5 flex flex-col gap-6 shadow-2xl relative z-10 transition-all duration-300 h-full">
+    <div className="w-64 bg-gradient-to-b from-slate-900/80 to-slate-950 backdrop-blur-xl border-r border-white/5 p-5 flex flex-col gap-6 shadow-xl relative z-10 transition-all duration-300 h-full">
       {/* Logo */}
       <div className="flex items-center gap-3 px-2 mb-2">
-        <div className="p-2 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-xl shadow-lg shadow-teal-500/20">
-          <GraduationCap className="w-5 h-5 text-white" />
-        </div>
+        <img src="/Favicon-logo.png" alt="SyllabusIQ" className="h-10 w-10 rounded-lg shadow-lg shadow-teal-500/20" />
         <div>
           <h2 className="text-white text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
             SyllabusIQ

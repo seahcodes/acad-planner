@@ -31,20 +31,23 @@ export default function Dashboard() {
   return (
     <div className="max-w-6xl mx-auto flex flex-col gap-8 pb-12">
       {/* Header */}
-     <header className="relative mt-12 mb-12 bg-white/[0.02] border border-white/[0.05] rounded-[3rem] p-10 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+     <header className="relative mt-12 mb-12 bg-gradient-to-r from-indigo-500/10 via-purple-500/5 to-pink-500/10 border border-indigo-500/20 rounded-[3rem] p-10 backdrop-blur-2xl shadow-[0_20px_50px_rgba(99,102,241,0.15)]">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           <div>
-            <h1 className="text-5xl font-black text-white mb-3 italic tracking-tight">Focus Mode: <span className="text-indigo-400">Active</span></h1>
-            <p className="text-slate-400 text-lg font-medium">You're mastering <b className="text-indigo-300">{stats.total} topics</b>.</p>
+            <h1 className="text-5xl font-black text-white mb-3 italic tracking-tight">Focus Mode: <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Active</span></h1>
+            <p className="text-slate-400 text-lg font-medium">You're mastering <b className="text-indigo-300">{stats.total} topics</b> • {completionPercentage}% complete</p>
           </div>
-          <div className="w-24 h-24 rounded-full border-4 border-indigo-500/20 flex items-center justify-center">
-            <span className="text-2xl font-black text-white">{completionPercentage}%</span>
+          <div className="w-32 h-32 rounded-full border-4 border-indigo-500/30 flex items-center justify-center bg-indigo-500/5 shadow-[inset_0_0_30px_rgba(99,102,241,0.2)]">
+            <div className="text-center">
+              <span className="text-4xl font-black bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">{completionPercentage}%</span>
+              <p className="text-xs text-slate-400 mt-1">Progress</p>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card title="Total Syllabus" value={stats.total} icon={Layers} color="indigo" onClick={() => navigate('/syllabus')} />
         <Card title="Strong" value={stats.strong} icon={CheckCircle2} color="emerald" onClick={() => navigate('/syllabus')} />
         <Card title="Moderate" value={stats.moderate} icon={TrendingUp} color="amber" onClick={() => navigate('/syllabus')} />
@@ -101,19 +104,24 @@ export default function Dashboard() {
 }
 
 function Card({ title, value, icon: Icon, color, onClick }) {
-  const colorStyles = {
-    indigo: "text-slate-300 bg-white/5 border-white/10",
-    emerald: "text-emerald-400 bg-emerald-500/5 border-emerald-500/10",
-    amber: "text-amber-400 bg-amber-500/5 border-amber-500/10",
-    rose: "text-rose-400 bg-rose-500/5 border-rose-500/10",
+  const colorConfig = {
+    indigo: { bg: 'from-indigo-500/15 to-indigo-500/5', border: 'border-indigo-500/30', shadow: 'shadow-indigo-500/10', icon: 'text-indigo-400', text: 'text-indigo-400' },
+    emerald: { bg: 'from-emerald-500/15 to-emerald-500/5', border: 'border-emerald-500/30', shadow: 'shadow-emerald-500/10', icon: 'text-emerald-400', text: 'text-emerald-400' },
+    amber: { bg: 'from-amber-500/15 to-amber-500/5', border: 'border-amber-500/30', shadow: 'shadow-amber-500/10', icon: 'text-amber-400', text: 'text-amber-400' },
+    rose: { bg: 'from-rose-500/15 to-rose-500/5', border: 'border-rose-500/30', shadow: 'shadow-rose-500/10', icon: 'text-rose-400', text: 'text-rose-400' },
   };
+
+  const cfg = colorConfig[color];
+
   return (
-    <div onClick={onClick} className={`cursor-pointer rounded-[2.5rem] border border-white/[0.05] bg-white/[0.02] backdrop-blur-md p-8 transition-all hover:-translate-y-2 ${colorStyles[color]}`}>
+    <div onClick={onClick} className={`cursor-pointer rounded-[2.5rem] border ${cfg.border} bg-gradient-to-br ${cfg.bg} backdrop-blur-md p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,0,0,0.3)] group`}>
       <div className="flex justify-between items-start mb-8">
-        <Icon className="w-6 h-6 opacity-50" />
+        <div className={`p-3 rounded-xl bg-white/5 group-hover:bg-white/10 transition-all ${cfg.icon}`}>
+          <Icon className="w-6 h-6" />
+        </div>
         <span className="text-4xl font-black text-white">{value}</span>
       </div>
-      <h3 className="text-slate-500 font-bold tracking-[0.2em] text-[9px] uppercase">{title}</h3>
+      <h3 className="text-slate-400 font-bold tracking-[0.2em] text-[9px] uppercase group-hover:text-white transition-colors">{title}</h3>
     </div>
   );
 }

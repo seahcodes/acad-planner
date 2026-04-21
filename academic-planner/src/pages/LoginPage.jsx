@@ -59,9 +59,9 @@ export default function LoginPage() {
 
       <div className="w-full max-w-md z-10 animate-in fade-in zoom-in-95 duration-500">
         <div className="flex flex-col items-center mb-8">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-[0_0_30px_rgba(99,102,241,0.3)] mb-4">
-            <BookOpen size={32} className="text-white" />
-          </div>
+          
+          <img src="/Favicon-logo.png" alt="SyllabusIQ" className="h-16 w-16 p-1" />
+          
           <h2 className="text-3xl font-black text-white tracking-tight">Welcome Back</h2>
           <p className="text-slate-400 mt-2">Sign in to your SyllabusIQ account</p>
         </div>

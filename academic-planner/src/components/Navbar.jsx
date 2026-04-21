@@ -2,12 +2,13 @@ import { Search, Bell, UserCircle } from "lucide-react";
 
 export default function Navbar() {
   return (
-    <div className="h-16 w-full border-b border-white/5 bg-slate-900/40 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-50">
+    <div className="h-16 w-full border-b border-white/5 bg-gradient-to-r from-slate-900/80 via-slate-900/60 to-slate-900/80 backdrop-blur-xl px-6 flex items-center justify-between sticky top-0 z-50 shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
       
-      {/* Title */}
-      <div className="flex items-center gap-4">
-        <h3 className="text-white/90 font-medium tracking-wide">
-          Academic Planner
+      {/* Logo and Title */}
+      <div className="flex items-center gap-3">
+        <img src="/Favicon-logo.png" alt="SyllabusIQ" className="h-10 w-10 rounded-lg shadow-lg" />
+        <h3 className="text-white/90 font-bold text-lg tracking-wide">
+          SyllabusIQ
         </h3>
       </div>
 
